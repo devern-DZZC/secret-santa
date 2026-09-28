@@ -1,5 +1,5 @@
 import "./setupUi";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { App } from "../../src/ui/App";
@@ -22,7 +22,10 @@ beforeEach(() => {
 
 describe("App flow", () => {
   it("shows the event details and countdown on the landing page", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(new Date("2026-11-01T12:00:00-04:00")); // before the event, so this never expires
     await go("#/");
+    vi.useRealTimers();
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(/secret santa/i);
     expect(screen.getByText(/the alley/i)).toBeInTheDocument();
     expect(screen.getByText(/27 december/i)).toBeInTheDocument();

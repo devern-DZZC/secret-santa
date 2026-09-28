@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { PERSON_IDS, type PersonId } from "../data/people";
+import { focusRequest } from "./useScreenHeading";
 
 export type Route =
   | { name: "home" }
@@ -13,8 +14,9 @@ const isPersonId = (id: string | undefined): id is PersonId =>
 export function parseHash(hash: string): Route {
   const [, screen, id] = hash.replace(/^#/, "").split("/");
   if (screen === "who") return { name: "who" };
-  if (screen === "pin" || screen === "giftee") {
-    return isPersonId(id) ? { name: screen, id } : { name: "who" };
+  if (screen === "pin" || screen === "giftee" || screen === "reveal") {
+    if (!isPersonId(id)) return { name: "who" };
+    return { name: screen === "pin" ? "pin" : "giftee", id };
   }
   return { name: "home" };
 }
@@ -37,7 +39,10 @@ export function useHashRoute(): [Route, Navigate] {
   const [route, setRoute] = useState<Route>(() => parseHash(window.location.hash));
 
   useEffect(() => {
-    const onChange = () => setRoute(parseHash(window.location.hash));
+    const onChange = () => {
+      focusRequest.pending = true;
+      setRoute(parseHash(window.location.hash));
+    };
     window.addEventListener("hashchange", onChange);
     return () => window.removeEventListener("hashchange", onChange);
   }, []);
@@ -46,6 +51,7 @@ export function useHashRoute(): [Route, Navigate] {
     const hash = toHash(next);
     if (replace) window.history.replaceState(null, "", hash);
     else window.history.pushState(null, "", hash);
+    focusRequest.pending = !replace;
     setRoute(next);
     window.scrollTo?.({ top: 0 });
   }, []);

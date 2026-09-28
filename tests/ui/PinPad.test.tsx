@@ -68,6 +68,15 @@ describe("PIN pad", () => {
     await vi.waitFor(() => expect(onUnlocked).toHaveBeenCalledTimes(1));
   });
 
+  it("does not cut a pasted PIN short when it has spaces in it", async () => {
+    const { onUnlocked, user } = setup();
+    const input = screen.getByLabelText(/pin/i, { selector: "input" });
+    expect(input).not.toHaveAttribute("maxlength");
+    await user.click(input);
+    await user.paste("20 04");
+    await vi.waitFor(() => expect(onUnlocked).toHaveBeenCalledTimes(1));
+  });
+
   it("locks for 30 seconds after 5 wrong PINs, refusing even the right one", async () => {
     const { onUnlocked, user } = setup();
     for (let i = 0; i < 5; i++) {
@@ -75,6 +84,9 @@ describe("PIN pad", () => {
       await vi.waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("0 of 4 digits entered"));
     }
     expect(await screen.findByText(/the elves need a break/i)).toBeInTheDocument();
+    // the alert is announced once; the ticking clock sits outside it
+    expect(screen.getByRole("alert").textContent).not.toMatch(/\d:\d\d/);
+    expect(screen.getByText(/^\d:\d\d$/)).toHaveAttribute("aria-hidden", "true");
     expect(screen.getByRole("button", { name: "2" })).toBeDisabled();
     await user.keyboard("2004");
     await act(() => new Promise((r) => setTimeout(r, 50)));

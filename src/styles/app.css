@@ -178,6 +178,7 @@ html[data-hidden] .sleigh__team {
 }
 
 .lights {
+  overflow: hidden;
   position: absolute;
   top: env(safe-area-inset-top);
   left: 0;
@@ -680,8 +681,23 @@ html[data-hidden] .sleigh__team {
   border-color: var(--gold);
 }
 
-.pin__message {
+.pin__feedback {
   min-height: 2.7em;
+}
+
+.pin__clock {
+  margin-top: -2px;
+  color: var(--gold);
+  font: 600 1.3rem var(--font-display);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
+.pin__message {
   padding: 4px 12px 0;
   color: var(--error);
   font-size: 0.98rem;
@@ -757,8 +773,19 @@ html[data-hidden] .sleigh__team {
   transform-origin: 50% 90%;
 }
 
-.gift:disabled {
+.gift[aria-disabled="true"] {
   cursor: default;
+}
+
+.gift__body {
+  position: absolute;
+  inset: 0;
+  display: block;
+  transform-origin: 50% 90%;
+}
+
+.gift:active .gift__body {
+  scale: 0.97;
 }
 
 .gift__box {

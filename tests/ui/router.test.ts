@@ -11,6 +11,7 @@ describe("hash router", () => {
     ["#/pin/santa", { name: "who" }],
     ["#/giftee/", { name: "who" }],
     ["#/nonsense", { name: "home" }],
+    ["#/reveal/dana", { name: "giftee", id: "dana" }],
   ])("parses %j", (hash, route) => {
     expect(parseHash(hash)).toEqual(route);
   });

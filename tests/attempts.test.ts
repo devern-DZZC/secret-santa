@@ -83,3 +83,19 @@ describe("wrong-PIN cooldown", () => {
     expect(createAttemptTracker({ now }).failuresLeft("devern")).toBe(5);
   });
 });
+
+describe("saved cooldown data is checked before use", () => {
+  it("ignores malformed entries instead of crashing", () => {
+    localStorage.setItem("ss:attempts", JSON.stringify({ devern: 1, feisha: { fails: "x", lockedUntil: null } }));
+    const t = createAttemptTracker({ now });
+    expect(() => t.recordFailure("devern")).not.toThrow();
+    expect(t.failuresLeft("devern")).toBe(4);
+    expect(t.failuresLeft("feisha")).toBe(5);
+  });
+
+  it("never locks for longer than 30 seconds, even if the saved time is far ahead", () => {
+    localStorage.setItem("ss:attempts", JSON.stringify({ devern: { fails: 5, lockedUntil: clock + 9_999_999 } }));
+    const t = createAttemptTracker({ now });
+    expect(t.lockRemainingMs("devern")).toBe(30_000);
+  });
+});

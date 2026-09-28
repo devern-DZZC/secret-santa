@@ -17,18 +17,29 @@ export interface AttemptTracker {
   recordSuccess(id: string): void;
 }
 
+const isEntry = (v: unknown): v is Entry =>
+  !!v &&
+  typeof v === "object" &&
+  Number.isFinite((v as Entry).fails) &&
+  Number.isFinite((v as Entry).lockedUntil);
+
+/** Keeps only well-formed saved entries; anything else starts fresh. */
+function loadState(saved: unknown): Record<string, Entry> {
+  if (!saved || typeof saved !== "object" || Array.isArray(saved)) return {};
+  return Object.fromEntries(Object.entries(saved).filter(([, v]) => isEntry(v))) as Record<string, Entry>;
+}
+
 export function createAttemptTracker({
   now = Date.now,
   store = safeStorage,
 }: { now?: () => number; store?: SafeStorage } = {}): AttemptTracker {
-  const saved = readJson(store, KEY);
-  const state: Record<string, Entry> =
-    saved && typeof saved === "object" && !Array.isArray(saved) ? (saved as Record<string, Entry>) : {};
+  const state = loadState(readJson(store, KEY));
 
   const save = () => store.set(KEY, JSON.stringify(state));
   const entry = (id: string): Entry => (state[id] ??= { fails: 0, lockedUntil: 0 });
 
-  const lockRemainingMs = (id: string) => Math.max(0, entry(id).lockedUntil - now());
+  // Capped so a changed phone clock can never lock someone out for longer than LOCK_MS.
+  const lockRemainingMs = (id: string) => Math.min(LOCK_MS, Math.max(0, entry(id).lockedUntil - now()));
 
   const clearExpired = (id: string) => {
     const e = entry(id);

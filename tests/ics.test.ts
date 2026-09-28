@@ -30,7 +30,7 @@ describe("add-to-calendar file", () => {
 
   it("escapes special characters", () => {
     const tricky = buildIcs({ ...event, title: "A; B, C\\D\nE" }, 0);
-    expect(tricky).toContain("SUMMARY:A\; B\\, C\\\\D\\nE");
+    expect(tricky).toContain("SUMMARY:A\\; B\\, C\\\\D\\nE");
   });
 });
 

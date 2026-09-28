@@ -85,13 +85,13 @@ describe("bad input is always denied", () => {
 describe("unlock never leaks more than it should", () => {
   it("returns only the giver and their one giftee, with no PINs anywhere", () => {
     for (const p of people) {
+      // assertSecret only: a failure here must never print the real giftee
       const result = unlock(p.id, p.pin)!;
-      expect(Object.keys(result).sort()).toEqual(["giver", "receiver"]);
+      assertSecret(Object.keys(result).sort().join() === "giver,receiver", "unlock result has extra keys");
       const json = JSON.stringify(result);
-      expect(json).not.toContain('"pin"');
-      for (const other of people) expect(json.includes(`"${other.pin}"`)).toBe(false);
-      expect(json).not.toContain("assignments");
-      expect(json).not.toContain("encoded");
+      assertSecret(!json.includes('"pin"'), "unlock result includes a pin field");
+      assertSecret(people.every((o) => !json.includes(`"${o.pin}"`)), "unlock result includes a PIN");
+      assertSecret(!json.includes("assignments") && !json.includes("encoded"), "unlock result leaks the draw");
     }
   });
 });

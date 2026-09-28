@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { m } from "motion/react";
 import { ArrowLeft } from "@phosphor-icons/react";
 import { people } from "../../data/people";
 import type { PersonId } from "../../data/people";
 import { ORNAMENT_TONES, Ornament } from "../components/Ornament";
 import { useCalmMode } from "../motion";
+import { useScreenHeading } from "../useScreenHeading";
 
 // Staggered string lengths make the wall look hand-hung rather than gridded.
 const STRINGS = [22, 58, 46, 18, 30, 64, 60, 26, 20, 50];
@@ -12,11 +13,14 @@ const STRINGS = [22, 58, 46, 18, 30, 64, 60, 26, 20, 50];
 export function WhoAreYou({ onPick, onBack }: { onPick: (id: PersonId) => void; onBack: () => void }) {
   const calm = useCalmMode();
   const [picked, setPicked] = useState<PersonId | null>(null);
+  const timer = useRef<number>();
+  const heading = useScreenHeading();
+  useEffect(() => () => window.clearTimeout(timer.current), []);
 
   const pick = (id: PersonId) => {
     if (picked) return;
     setPicked(id);
-    window.setTimeout(() => onPick(id), calm ? 0 : 420);
+    timer.current = window.setTimeout(() => onPick(id), calm ? 0 : 420);
   };
 
   return (
@@ -25,7 +29,7 @@ export function WhoAreYou({ onPick, onBack }: { onPick: (id: PersonId) => void; 
         <ArrowLeft size={18} weight="bold" aria-hidden="true" />
         <span>Back</span>
       </button>
-      <h1 className="screen__title">Who are you?</h1>
+      <h1 className="screen__title" ref={heading} tabIndex={-1}>Who are you?</h1>
       <p className="screen__lede">Tap your ornament.</p>
       <ul className="ornament-wall">
         {people.map((p, i) => (

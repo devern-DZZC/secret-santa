@@ -5,9 +5,11 @@ import { Button } from "../components/Button";
 import { Countdown } from "../components/Countdown";
 import { EventCard } from "../components/EventCard";
 import { EASE_OUT, useCalmMode } from "../motion";
+import { useScreenHeading } from "../useScreenHeading";
 
 export function Landing({ onStart }: { onStart: () => void }) {
   const calm = useCalmMode();
+  const heading = useScreenHeading();
   const rise = (delay: number) =>
     calm
       ? {}
@@ -16,7 +18,7 @@ export function Landing({ onStart }: { onStart: () => void }) {
   return (
     <div className="screen screen--landing">
       <header className="hero">
-        <m.h1 className="hero__title" {...rise(0.05)}>
+        <m.h1 className="hero__title" ref={heading} tabIndex={-1} {...rise(0.05)}>
           Cousins'<br />Secret Santa
         </m.h1>
         <m.p className="hero__lede" {...rise(0.15)}>

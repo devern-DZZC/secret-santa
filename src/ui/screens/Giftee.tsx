@@ -7,9 +7,28 @@ import { Button } from "../components/Button";
 import { EventCard } from "../components/EventCard";
 import { GiftBox } from "../components/GiftBox";
 import { EASE_OUT, useCalmMode } from "../motion";
+import { focusRequest, useScreenHeading } from "../useScreenHeading";
 
 const TAPS = 3;
 const CONFETTI = ["#b3202a", "#e8b64c", "#1f7a55", "#fdfaf4"];
+
+function RevealHeading({ name }: { name: string }) {
+  const ref = useScreenHeading();
+  return (
+    <h1 className="screen__title" ref={ref} tabIndex={-1}>
+      Ready, {name}?
+    </h1>
+  );
+}
+
+function GifteeHeading() {
+  const ref = useScreenHeading();
+  return (
+    <h1 className="giftee__kicker" ref={ref} tabIndex={-1}>
+      You're Secret Santa for
+    </h1>
+  );
+}
 
 function burst() {
   import("canvas-confetti")
@@ -42,12 +61,18 @@ export function Giftee({ result, playReveal, onSwitch }: Props) {
   useEffect(() => {
     if (phase !== "opening") return;
     burst();
-    const t = window.setTimeout(() => setPhase("open"), 1900);
+    const t = window.setTimeout(() => open(), 1900);
     return () => window.clearTimeout(t);
   }, [phase]);
 
+  // Moving between the unwrap and the giftee is a screen change for focus purposes.
+  const open = () => {
+    focusRequest.pending = true;
+    setPhase("open");
+  };
+
   const tap = () => {
-    if (phase !== "wrapped") return;
+    if (phase !== "wrapped") return; // aria-disabled button: ignore taps once opening
     navigator.vibrate?.(20);
     const next = tapsLeft - 1;
     setTapsLeft(next);
@@ -55,6 +80,7 @@ export function Giftee({ result, playReveal, onSwitch }: Props) {
   };
 
   const replay = () => {
+    focusRequest.pending = true;
     setTapsLeft(TAPS);
     setPhase(calm ? "open" : "wrapped");
   };
@@ -69,7 +95,7 @@ export function Giftee({ result, playReveal, onSwitch }: Props) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.35 } }}
         >
-          <h1 className="screen__title">Ready, {giver.shortName}?</h1>
+          <RevealHeading name={giver.shortName} />
           <p className="screen__lede" aria-live="polite">
             {phase === "opening"
               ? "Here we go…"
@@ -95,7 +121,7 @@ export function Giftee({ result, playReveal, onSwitch }: Props) {
             )}
           </div>
           {phase === "wrapped" && (
-            <button type="button" className="text-link" onClick={() => setPhase("open")}>
+            <button type="button" className="text-link" onClick={open}>
               Skip the animation
             </button>
           )}
@@ -118,7 +144,7 @@ export function Giftee({ result, playReveal, onSwitch }: Props) {
             >
               {receiver.emoji}
             </m.span>
-            <h1 className="giftee__kicker">You're Secret Santa for</h1>
+            <GifteeHeading />
             <h2 className="giftee__name">{receiver.name}</h2>
           </header>
 

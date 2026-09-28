@@ -7,6 +7,7 @@ import { unlock, type PublicPerson, type UnlockResult } from "../../lib/unlock";
 import { ORNAMENT_TONES, Ornament } from "../components/Ornament";
 import { formatClock } from "../format";
 import { useCalmMode } from "../motion";
+import { useScreenHeading } from "../useScreenHeading";
 
 const PIN_LENGTH = 4;
 const KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "back"] as const;
@@ -23,7 +24,11 @@ type Status = "idle" | "wrong" | "success";
 export function PinPad({ person, tracker, onUnlocked, onBack }: Props) {
   const calm = useCalmMode();
   const [scope, animate] = useAnimate();
+  const heading = useScreenHeading();
   const digitsRef = useRef("");
+  const timers = useRef<number[]>([]);
+  const later = (fn: () => void, ms: number) => timers.current.push(window.setTimeout(fn, ms));
+  useEffect(() => () => timers.current.forEach((t) => window.clearTimeout(t)), []);
   const statusRef = useRef<Status>("idle");
   const [digits, setDigitsState] = useState("");
   const [status, setStatusState] = useState<Status>("idle");
@@ -59,7 +64,7 @@ export function PinPad({ person, tracker, onUnlocked, onBack }: Props) {
         tracker.recordSuccess(person.id);
         setStatus("success");
         setMessage("");
-        window.setTimeout(() => onUnlocked(result, pin), calm ? 0 : 750);
+        later(() => onUnlocked(result, pin), calm ? 0 : 750);
         return;
       }
       tracker.recordFailure(person.id);
@@ -75,7 +80,7 @@ export function PinPad({ person, tracker, onUnlocked, onBack }: Props) {
             ? `That's not your PIN. ${left} ${left === 1 ? "try" : "tries"} left.`
             : "That's not your PIN. Try again.",
       );
-      window.setTimeout(() => {
+      later(() => {
         setDigits("");
         setStatus("idle");
       }, calm ? 0 : 480);
@@ -114,7 +119,7 @@ export function PinPad({ person, tracker, onUnlocked, onBack }: Props) {
   }, [press]);
 
   const disabled = locked || status !== "idle";
-  const alertText = locked ? `Too many tries. The elves need a break for ${formatClock(lockMs)}.` : message;
+  const alertText = locked ? "Too many tries. The elves need a break." : message;
 
   return (
     <div className="screen screen--pin">
@@ -127,7 +132,7 @@ export function PinPad({ person, tracker, onUnlocked, onBack }: Props) {
         <div ref={scope} className="pin__ornament">
           <Ornament emoji={person.emoji} tone={tone} stringLength={8} glowing={status === "success"} />
         </div>
-        <h1 className="screen__title">Hi {person.shortName}!</h1>
+        <h1 className="screen__title" ref={heading} tabIndex={-1}>Hi {person.shortName}!</h1>
         <p className="screen__lede">Enter your 4-digit PIN.</p>
       </div>
 
@@ -140,7 +145,6 @@ export function PinPad({ person, tracker, onUnlocked, onBack }: Props) {
         autoComplete="off"
         data-1p-ignore="true"
         data-lpignore="true"
-        maxLength={PIN_LENGTH}
         value={digits}
         disabled={disabled}
         onChange={(e) => accept(e.target.value)}
@@ -157,7 +161,12 @@ export function PinPad({ person, tracker, onUnlocked, onBack }: Props) {
         ))}
       </div>
       <p role="status" className="sr-only">{`${digits.length} of ${PIN_LENGTH} digits entered`}</p>
-      <p role="alert" className="pin__message">{alertText}</p>
+      <div className="pin__feedback">
+        <p role="alert" className="pin__message">{alertText}</p>
+        {locked && (
+          <p className="pin__clock" aria-hidden="true">{formatClock(lockMs)}</p>
+        )}
+      </div>
 
       <div className="keypad">
         {KEYS.map((key, i) =>

@@ -18,6 +18,8 @@ async function enterPin(page: Page, pin: string) {
 }
 
 test("landing shows the title, countdown and event details", async ({ page }) => {
+  // pin the clock before the event so this keeps passing after 27 December
+  await page.clock.setFixedTime(new Date("2026-11-01T12:00:00-04:00"));
   await page.goto("./");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Secret Santa");
   await expect(page.getByRole("timer")).toBeVisible();
@@ -95,8 +97,9 @@ test.describe("at 375px wide", () => {
     test(`no sideways scrolling and 44px+ tap targets on "${hash || "#/"}"`, async ({ page }) => {
       await page.goto(`./${hash}`);
       await page.waitForTimeout(700);
-      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-      expect(overflow).toBeLessThanOrEqual(0);
+      // compare with the real 375px (mobile emulation widens innerWidth to fit overflow)
+      const pageWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+      expect(pageWidth, "page width").toBeLessThanOrEqual(375);
       for (const button of await page.getByRole("button").all()) {
         const box = await button.boundingBox();
         if (!box) continue;

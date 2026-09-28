@@ -1,0 +1,39 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Fredoka;src:url(../../node_modules/@fontsource-variable/fredoka/files/fredoka-latin-wght-normal.woff2)}
+@font-face{font-family:Figtree;src:url(../../node_modules/@fontsource-variable/figtree/files/figtree-latin-wght-normal.woff2)}
+html,body{margin:0;width:1200px;height:630px;overflow:hidden}
+body{background:radial-gradient(ellipse 120% 80% at 50% 0%,#17334f,transparent 70%),radial-gradient(ellipse 90% 50% at 50% 115%,rgb(15 61 46/.7),transparent 70%),#0b1a2a;color:#fdfaf4;font-family:Figtree;position:relative}
+.wire{position:absolute;inset:0 0 auto;width:100%;height:70px}
+.wire path{fill:none;stroke:rgb(253 250 244/.3);stroke-width:3}
+.b{position:absolute;width:20px;height:30px;border-radius:50% 50% 46% 46%/40% 40% 60% 60%;transform:translateX(-50%)}
+.b::after{content:"";position:absolute;inset:-16px;border-radius:50%;background:radial-gradient(circle,var(--c),transparent 68%);opacity:.6}
+.b{background:radial-gradient(circle at 40% 70%,#fff9,var(--c) 55%)}
+.wrap{position:absolute;inset:0;display:grid;grid-template-columns:1.25fr 1fr;align-items:center;padding:60px 80px 40px}
+h1{font:650 96px/0.95 Fredoka;margin:0;letter-spacing:-.015em}
+p{margin:26px 0 0;color:#a9b8c6;font-size:32px}
+p strong{color:#e8b64c;font:600 34px Fredoka}
+.orns{position:relative;height:430px}
+.o{position:absolute;display:flex;flex-direction:column;align-items:center}
+.o i{width:3px;background:linear-gradient(rgb(232 182 76/.1),rgb(232 182 76/.8))}
+.o b{width:30px;height:16px;border-radius:5px;background:linear-gradient(90deg,#8a6a2a,#f0d690 45%,#9c7a31)}
+.o span{display:grid;place-items:center;border-radius:50%;margin-top:-2px;box-shadow:inset -12px -16px 30px rgb(0 0 0/.35),0 20px 40px -18px #000;
+ background:radial-gradient(circle at 32% 26%,rgb(255 255 255/.6) 0 5%,transparent 20%),radial-gradient(circle at 50% 45%,var(--l),var(--d) 78%)}
+</style></head><body>
+<svg class="wire" viewBox="0 0 1200 70" preserveAspectRatio="none"><path d="M0 8 Q 100 52 200 12 T 400 12 T 600 12 T 800 12 T 1000 12 T 1200 8"/></svg>
+<div id="bulbs"></div>
+<div class="wrap">
+  <div><h1>Cousins'<br>Secret Santa</h1><p>Find out who you're buying for.<br><strong>Sunday 27 December, 7pm<br>at The Alley</strong></p></div>
+  <div class="orns">
+    <div class="o" style="left:110px;top:0"><i style="height:290px"></i><b></b><span style="width:100px;height:100px;font-size:42px;--l:#f5d27a;--d:#8d6414">⭐</span></div>
+    <div class="o" style="left:20px;top:0"><i style="height:90px"></i><b></b><span style="width:150px;height:150px;font-size:64px;--l:#d63c47;--d:#6c0f18">🎁</span></div>
+    <div class="o" style="left:200px;top:0"><i style="height:190px"></i><b></b><span style="width:120px;height:120px;font-size:50px;--l:#2f9c6e;--d:#0a3021">⛄</span></div>
+  </div>
+</div>
+<script>
+const c=["#ffd36e","#ff5a64","#4fd49a","#9fd4ff"];let h="";
+for(let i=0;i<14;i++){const x=(i+.5)/14;const y=(12+22*Math.abs(Math.sin(x*Math.PI*6)))*70/70;h+=`<span class="b" style="left:${x*100}%;top:${y}px;--c:${c[i%4]}"></span>`}
+document.getElementById("bulbs").innerHTML=h;
+</script>
+</body></html>

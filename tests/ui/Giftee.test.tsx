@@ -1,9 +1,12 @@
 import { setReducedMotion } from "./setupUi";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Giftee } from "../../src/ui/screens/Giftee";
 import { unlock } from "../../src/lib/unlock";
+
+const confetti = vi.hoisted(() => vi.fn());
+vi.mock("canvas-confetti", () => ({ default: confetti }));
 
 // Full-motion path: the unwrap plays. (Draw is the public fixture, see setupUi.)
 beforeEach(() => setReducedMotion(false));
@@ -22,6 +25,7 @@ describe("gift reveal", () => {
     await user.click(await screen.findByRole("button", { name: /open your gift, 1 tap to go/i }));
 
     expect(await screen.findByText(/you're secret santa for/i, {}, { timeout: 4000 })).toBeInTheDocument();
+    expect(confetti).toHaveBeenCalled();
     expect(screen.getAllByRole("listitem")).toHaveLength(3);
   });
 

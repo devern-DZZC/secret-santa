@@ -82,3 +82,11 @@ describe("background music", () => {
     expect(stats.gainMoves).toBe(2);
   });
 });
+
+describe("loudness", () => {
+  it("keeps the music soft, well under the sound effects", async () => {
+    const { SFX_VOLUME } = await import("../../src/ui/audio");
+    expect(music.MUSIC_VOLUME).toBeLessThanOrEqual(0.1);
+    expect(SFX_VOLUME).toBe(0.55); // sound effects unchanged
+  });
+});

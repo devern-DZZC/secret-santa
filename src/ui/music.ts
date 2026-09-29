@@ -7,7 +7,9 @@
 import { WE_WISH_YOU, buildLoop, midiToHz, type ScoreEvent } from "../lib/musicScore";
 import { existingMusicBus, musicBus, type Bus } from "./audio";
 
-const VOLUME = 0.2;
+/** Background music loudness (0 to 1): kept low so it sits under the sound effects. */
+export const MUSIC_VOLUME = 0.1;
+const VOLUME = MUSIC_VOLUME;
 const LOOKAHEAD_S = 0.45;
 const TICK_MS = 120;
 
@@ -35,9 +37,8 @@ function voice(bus: Bus, at: number, freq: number, partials: Array<[number, numb
 // A music-box tine: bright fundamental plus quickly fading upper partials.
 const MUSIC_BOX: Array<[number, number, number]> = [
   [1, 1, 2.2],
-  [2, 0.35, 4],
-  [3.01, 0.18, 6],
-  [4.2, 0.1, 9],
+  [2, 0.22, 4],
+  [3.01, 0.08, 7],
 ];
 const BASS: Array<[number, number, number]> = [
   [1, 1, 2.5],
@@ -57,7 +58,7 @@ function playEvent(bus: Bus, e: ScoreEvent, at: number) {
       // a quiet shake of sleigh bells on each beat
       for (let i = 0; i < 3; i++) {
         const t = at + Math.random() * 0.05;
-        voice(bus, t, 2600 + Math.random() * 1800, [[1, 1, 28]], 0.035, 0.15);
+        voice(bus, t, 2400 + Math.random() * 1400, [[1, 1, 32]], 0.018, 0.12);
       }
     }
   }

@@ -12,6 +12,9 @@ export interface Bus {
   out: GainNode;
 }
 
+/** Overall loudness of the sound effects (0 to 1). */
+export const SFX_VOLUME = 0.55;
+
 let ctx: AudioContext | null = null;
 let sfxGain: GainNode | null = null;
 let musicGain: GainNode | null = null;
@@ -27,11 +30,17 @@ function context(): AudioContext | null {
       const comp = ctx.createDynamicsCompressor();
       comp.connect(ctx.destination);
       sfxGain = ctx.createGain();
-      sfxGain.gain.value = 0.55;
+      sfxGain.gain.value = SFX_VOLUME;
       sfxGain.connect(comp);
+
+      // Music only: a low-pass filter rounds off the bright top end so it sits softly in the background.
+      const musicTone = ctx.createBiquadFilter();
+      musicTone.type = "lowpass";
+      musicTone.frequency.value = 3200;
+      musicTone.connect(comp);
       musicGain = ctx.createGain();
       musicGain.gain.value = 0;
-      musicGain.connect(comp);
+      musicGain.connect(musicTone);
     }
     if (ctx.state === "suspended") void ctx.resume();
     return ctx;

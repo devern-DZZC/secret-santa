@@ -21,6 +21,7 @@ export function installFakeAudio() {
     }
     createGain = node;
     createDynamicsCompressor = node;
+    createBiquadFilter = () => ({ ...node(), type: "lowpass", frequency: { value: 0 } });
     createOscillator() {
       stats.oscillators++;
       return { ...node(), type: "sine", frequency: { setValueAtTime() {} }, start() {}, stop() {} };

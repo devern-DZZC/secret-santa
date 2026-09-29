@@ -55,12 +55,13 @@ Everyone gives exactly once and receives exactly once, nobody draws themselves, 
 | R5 | Brandon and Christopher Ali |
 | R6 | Brandon and Dana |
 | R7 | Christopher Ali and Dana |
+| R8 | Devern and Nirvana |
 
 The tests prove this several ways:
-- 14 forbidden directions, each checked separately,
+- 16 forbidden directions, each checked separately,
 - 10 self-draw checks,
 - 100,000 random draws,
-- an exhaustive check of all 3,628,800 possible assignments (exactly 60,192 are valid single loops),
+- an exhaustive check of all 3,628,800 possible assignments (exactly 47,200 are valid single loops),
 - a fairness check,
 - and the 10 × 10 PIN matrix (each PIN opens only its owner).
 

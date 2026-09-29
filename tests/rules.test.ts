@@ -10,13 +10,14 @@ const SPEC_PAIRS = [
   ["brandon", "chris-ali"],
   ["brandon", "dana"],
   ["chris-ali", "dana"],
+  ["devern", "nirvana"],
 ] as const;
 
 const norm = (a: string, b: string) => [a, b].sort().join("|");
 
 describe("exclusion rules data", () => {
-  it("contains exactly the 7 pairs from the spec (any order, either orientation)", () => {
-    expect(exclusions).toHaveLength(7);
+  it("contains exactly the 8 pairs from the spec (any order, either orientation)", () => {
+    expect(exclusions).toHaveLength(8);
     expect(new Set(exclusions.map(([a, b]) => norm(a, b)))).toEqual(
       new Set(SPEC_PAIRS.map(([a, b]) => norm(a, b))),
     );

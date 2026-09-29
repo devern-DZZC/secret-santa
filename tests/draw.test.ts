@@ -85,12 +85,12 @@ describe("exhaustive cross-check of all 10! = 3,628,800 assignments", () => {
     });
   }, 180_000);
 
-  it("accepts exactly 244,800 draws when single loops are not required", () => {
-    expect(valid).toBe(244_800);
+  it("accepts exactly 194,288 draws when single loops are not required", () => {
+    expect(valid).toBe(194_288);
   });
 
-  it("accepts exactly 60,192 draws when a single loop is required", () => {
-    expect(validSingleLoop).toBe(60_192);
+  it("accepts exactly 47,200 draws when a single loop is required", () => {
+    expect(validSingleLoop).toBe(47_200);
   });
 
   it("gives each giver the expected number of allowed receivers", () => {
@@ -98,7 +98,9 @@ describe("exhaustive cross-check of all 10! = 3,628,800 assignments", () => {
     expect(optionsFor("chris-ali")).toBe(6);
     expect(optionsFor("brandon")).toBe(7);
     expect(optionsFor("dana")).toBe(7);
-    for (const g of ["devern", "feisha", "eeshana", "nathan", "nirvana", "chris-alexander", "reyan"]) {
+    expect(optionsFor("devern")).toBe(7);
+    expect(optionsFor("nirvana")).toBe(7);
+    for (const g of ["feisha", "eeshana", "nathan", "chris-alexander", "reyan"]) {
       expect(optionsFor(g)).toBe(8);
     }
   });
@@ -115,7 +117,7 @@ describe("exhaustive cross-check of all 10! = 3,628,800 assignments", () => {
       }
     }
     for (const [pair, count] of loopPairCounts) {
-      const expected = (count / 60_192) * RUNS;
+      const expected = (count / 47_200) * RUNS;
       const actual = seen.get(pair) ?? 0;
       expect(actual, `pairing ${pair} appeared at least once`).toBeGreaterThan(0);
       expect(Math.abs(actual - expected) / expected, `pairing ${pair} within 10%`).toBeLessThan(0.1);
@@ -175,8 +177,8 @@ describe("validateDraw error reporting", () => {
   it("reports two separate loops as not a single loop, unless loops are allowed", () => {
     // Two valid 5-person loops: no self-draws, no excluded pairs, but not one big loop.
     const twoLoops: Record<string, string> = {
-      devern: "eeshana", eeshana: "chris-ali", "chris-ali": "feisha", feisha: "nirvana", nirvana: "devern",
-      nathan: "brandon", brandon: "reyan", reyan: "dana", dana: "chris-alexander", "chris-alexander": "nathan",
+      devern: "eeshana", eeshana: "feisha", feisha: "nathan", nathan: "chris-ali", "chris-ali": "devern",
+      nirvana: "brandon", brandon: "chris-alexander", "chris-alexander": "dana", dana: "reyan", reyan: "nirvana",
     };
     expect(validateDraw(twoLoops, ids, exclusions)).toEqual({ ok: false, errors: ["not a single cycle"] });
     expect(validateDraw(twoLoops, ids, exclusions, { requireSingleCycle: false })).toEqual({ ok: true, errors: [] });

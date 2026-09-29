@@ -35,8 +35,13 @@ describe("the public fixture draw", () => {
   });
 });
 
-describe("each forbidden assignment (14 directed pairs)", () => {
-  it("covers all 14", () => expect(FORBIDDEN).toHaveLength(14));
+describe("each forbidden assignment (16 directed pairs)", () => {
+  it("covers all 16", () => expect(FORBIDDEN).toHaveLength(16));
+
+  it("includes the Devern and Nirvana rule (R8) in both directions", () => {
+    expect(FORBIDDEN).toContainEqual(["R8", "devern", "nirvana"]);
+    expect(FORBIDDEN).toContainEqual(["R8", "nirvana", "devern"]);
+  });
 
   describe.each(FORBIDDEN)("%s: %s must never draw %s", (rule, giver, receiver) => {
     it("is rejected by the validator", () => {

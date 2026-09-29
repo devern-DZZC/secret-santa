@@ -549,3 +549,12 @@ The host found the night theme too dark and plain. This section replaces §14.4'
 - **Control:** it has its own switch, stored in `ss:music` and on by default, separate from the sound effects switch.
 
 **Bug fix:** "Replay the reveal" now scrolls to the top so the gift is in view on phones. Before, the page stayed scrolled to the bottom. This is covered by a unit test and an e2e test on both phone sizes.
+
+## 16. Addendum: rule R8 (2026-09-28, 22:30)
+
+The host added a rule: **Devern ↔ Nirvana** must not draw each other in either direction. It is R8 in `src/data/rules.ts`, which makes 8 pairs and 16 forbidden directed assignments. This supersedes the counts in §3, §4 and §9.
+
+The new exhaustive counts are **194,288** valid draws and **47,200** single-loop draws. Devern and Nirvana now have 7 allowed receivers each, and Christopher Ali still has the fewest at 6. The tests were updated first and seen to fail, then the rule was added.
+
+A fresh draw was made with `npm run draw -- --force` whether or not the old draw broke R8. Checking first and redrawing only when needed would have told the host something about the old pairings.
+

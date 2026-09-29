@@ -441,12 +441,18 @@ html[data-hidden] .sleigh__bob {
   bottom: 26px;
 }
 
-/* Sound toggle */
-.sound-toggle {
+/* Music and sound switches */
+.audio-toggles {
   position: absolute;
   z-index: 20;
   top: calc(64px + env(safe-area-inset-top));
   right: max(12px, env(safe-area-inset-right));
+  display: flex;
+  gap: 8px;
+}
+
+.audio-toggle {
+  position: relative;
   display: grid;
   place-items: center;
   width: 44px;
@@ -459,8 +465,23 @@ html[data-hidden] .sleigh__bob {
   cursor: pointer;
 }
 
-.sound-toggle[aria-pressed="false"] {
+.audio-toggle:first-child {
+  color: var(--green);
+}
+
+.audio-toggle.is-off {
   color: var(--ink-soft);
+}
+
+/* a diagonal line through the music note when music is off */
+.audio-toggle.is-off:first-child::after {
+  content: "";
+  position: absolute;
+  width: 26px;
+  height: 2.5px;
+  border-radius: 2px;
+  background: var(--ink-soft);
+  transform: rotate(-45deg);
 }
 
 /* --------------------------------------------------------------------------

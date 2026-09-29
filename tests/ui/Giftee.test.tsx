@@ -46,6 +46,17 @@ describe("gift reveal", () => {
   });
 });
 
+describe("replaying the reveal", () => {
+  it("scrolls back to the top so the gift is in view", async () => {
+    const user = userEvent.setup();
+    const scrollTo = vi.spyOn(window, "scrollTo");
+    render(<Giftee result={result()} playReveal={false} onSwitch={() => {}} />);
+    scrollTo.mockClear();
+    await user.click(screen.getByRole("button", { name: /replay the reveal/i }));
+    expect(scrollTo).toHaveBeenCalledWith(expect.objectContaining({ top: 0 }));
+  });
+});
+
 describe("keyboard use", () => {
   it("keeps focus on the gift while tapping it with the keyboard", async () => {
     const user = userEvent.setup();

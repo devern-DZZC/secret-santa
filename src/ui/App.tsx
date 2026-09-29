@@ -11,6 +11,7 @@ import { Snow } from "./scene/Snow";
 import { Sleigh } from "./scene/Sleigh";
 import { Village } from "./scene/Village";
 import { SoundToggle } from "./components/SoundToggle";
+import { isMusicPlaying, startMusic, stopMusic } from "./music";
 import { Giftee } from "./screens/Giftee";
 import { Landing } from "./screens/Landing";
 import { PinPad } from "./screens/PinPad";
@@ -34,6 +35,31 @@ export function App() {
     () => (route.name === "giftee" ? resolveGiftee(route.id, session) : null),
     [route, session],
   );
+
+  // Background music starts on the first tap (phones don't allow audio before that)
+  // and pauses while the app is in the background.
+  useEffect(() => {
+    let resumeOnReturn = false;
+    const first = () => {
+      startMusic();
+      window.removeEventListener("click", first, true);
+      window.removeEventListener("keydown", first, true);
+    };
+    const onVisibility = () => {
+      if (document.hidden) {
+        resumeOnReturn = isMusicPlaying();
+        stopMusic();
+      } else if (resumeOnReturn) startMusic();
+    };
+    window.addEventListener("click", first, true);
+    window.addEventListener("keydown", first, true);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("click", first, true);
+      window.removeEventListener("keydown", first, true);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
 
   // A giftee link without a valid unlock always goes back to the PIN screen.
   useEffect(() => {

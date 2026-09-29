@@ -24,3 +24,15 @@ describe("sound preference", () => {
     expect(isSoundOn(blocked)).toBe(true);
   });
 });
+
+describe("music preference (separate from sound effects)", () => {
+  it("is on by default and independent of sound effects", async () => {
+    const { isMusicOn, setMusicOn } = await import("../src/lib/soundPrefs");
+    expect(isMusicOn()).toBe(true);
+    setMusicOn(false);
+    expect(isMusicOn()).toBe(false);
+    expect(isSoundOn()).toBe(true);
+    setMusicOn(true);
+    expect(isMusicOn()).toBe(true);
+  });
+});

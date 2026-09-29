@@ -542,3 +542,10 @@ The host found the night theme too dark and plain. This section replaces §14.4'
 **Sound:** the Web Audio API synthesises everything, with no files. There's a key tick, a wrong-PIN two-tone, an unlock ding-ding, sleigh bells on each gift tap (growing with each tap) and a bell arpeggio with sleigh-bell shimmer on the reveal. The mute preference is stored in `ss:sound` and defaults to on.
 
 **Review against defaults:** the generic take would be a red page with a script font and snow. This design adds the hanging gift-tag countdown, the patterned ornament wall on a garland, snowball keys, a candy-cane edge on every card, and the sleigh flyover as a recurring character. It also keeps the Trini vernacular in the copy.
+
+**Background music (added later that evening):** the host chose "We Wish You a Merry Christmas" from three previews.
+- **Arrangement:** a music box plus waltz bass, chord plucks and quiet sleigh bells, at 165 bpm in 3/4 time. The score lives in `src/lib/musicScore.ts`, and a look-ahead Web Audio scheduler plays it from `src/ui/music.ts`.
+- **When it plays:** it starts on the first click or keypress, pauses while the tab is hidden, and ducks under the reveal fanfare for about 3 seconds.
+- **Control:** it has its own switch, stored in `ss:music` and on by default, separate from the sound effects switch.
+
+**Bug fix:** "Replay the reveal" now scrolls to the top so the gift is in view on phones. Before, the page stayed scrolled to the bottom. This is covered by a unit test and an e2e test on both phone sizes.

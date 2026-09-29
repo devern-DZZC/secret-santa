@@ -3,35 +3,10 @@
  * Bells use a few inharmonic partials so they ring like real handbells; sleigh bells are
  * clusters of tiny high bells. Everything is a no-op when sound is off or unsupported.
  */
-import { isSoundOn } from "../lib/soundPrefs";
-
-type Ctx = AudioContext;
-let ctx: Ctx | null = null;
-let master: GainNode | null = null;
-
-function audio(): { ac: Ctx; out: AudioNode } | null {
-  if (!isSoundOn()) return null;
-  const AC =
-    (window as unknown as { AudioContext?: typeof AudioContext }).AudioContext ??
-    (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-  if (!AC) return null;
-  try {
-    if (!ctx) {
-      ctx = new AC();
-      const comp = ctx.createDynamicsCompressor();
-      master = ctx.createGain();
-      master.gain.value = 0.55;
-      master.connect(comp).connect(ctx.destination);
-    }
-    if (ctx.state === "suspended") void ctx.resume();
-    return { ac: ctx, out: master! };
-  } catch {
-    return null;
-  }
-}
+import { sfxBus, type Bus } from "./audio";
 
 function tone(
-  a: { ac: Ctx; out: AudioNode },
+  a: Bus,
   at: number,
   freq: number,
   dur: number,
@@ -51,7 +26,7 @@ function tone(
 }
 
 /** A handbell: fundamental plus inharmonic partials that die away faster. */
-function bell(a: { ac: Ctx; out: AudioNode }, at: number, freq: number, gain = 0.22, dur = 1.4) {
+function bell(a: Bus, at: number, freq: number, gain = 0.22, dur = 1.4) {
   const partials: Array<[ratio: number, amp: number]> = [
     [1, 1],
     [2.01, 0.45],
@@ -62,7 +37,7 @@ function bell(a: { ac: Ctx; out: AudioNode }, at: number, freq: number, gain = 0
 }
 
 /** A shake of sleigh bells: many tiny, slightly random high bells. */
-function sleighBells(a: { ac: Ctx; out: AudioNode }, at: number, count: number, spread: number, gain = 0.07) {
+function sleighBells(a: Bus, at: number, count: number, spread: number, gain = 0.07) {
   for (let i = 0; i < count; i++) {
     const t = at + Math.random() * spread;
     const f = 2600 + Math.random() * 1900;
@@ -71,8 +46,8 @@ function sleighBells(a: { ac: Ctx; out: AudioNode }, at: number, count: number, 
   }
 }
 
-const play = (fn: (a: { ac: Ctx; out: AudioNode }, now: number) => void) => () => {
-  const a = audio();
+const play = (fn: (a: Bus, now: number) => void) => () => {
+  const a = sfxBus();
   if (a) fn(a, a.ac.currentTime + 0.01);
 };
 

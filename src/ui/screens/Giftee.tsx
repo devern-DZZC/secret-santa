@@ -3,6 +3,7 @@ import { AnimatePresence, m } from "motion/react";
 import { ArrowCounterClockwise, UserSwitch } from "@phosphor-icons/react";
 import { Art, art } from "../art";
 import { sfx } from "../sound";
+import { duckMusic } from "../music";
 import { event } from "../../data/event";
 import type { UnlockResult } from "../../lib/unlock";
 import { Button } from "../components/Button";
@@ -64,6 +65,7 @@ export function Giftee({ result, playReveal, onSwitch }: Props) {
   useEffect(() => {
     if (phase !== "opening") return;
     burst();
+    duckMusic(3200);
     sfx.reveal();
     const t = window.setTimeout(() => open(), 1900);
     return () => window.clearTimeout(t);
@@ -85,6 +87,8 @@ export function Giftee({ result, playReveal, onSwitch }: Props) {
   };
 
   const replay = () => {
+    // the giftee page is long; bring the gift back into view
+    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
     focusRequest.pending = true;
     setTapsLeft(TAPS);
     setPhase(calm ? "open" : "wrapped");

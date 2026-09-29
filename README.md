@@ -66,7 +66,10 @@ The tests prove this several ways:
 
 ## Sound
 
-Gift taps jingle like sleigh bells, the reveal plays a bell fanfare, and the keypad clicks and dings. The sounds are made in the browser with the Web Audio API, so there are no audio files to download. The speaker button at the top right turns sound off or on, and the phone remembers the choice. On iPhone, the silent switch also mutes these sounds.
+- **Background music:** "We Wish You a Merry Christmas" (traditional, public domain) on a music box with sleigh bells. It starts on the first tap, because phones don't allow sound before that, loops quietly, and dips under the reveal fanfare.
+- **Sound effects:** gift taps jingle like sleigh bells, the reveal plays a bell fanfare, and the keypad clicks and dings.
+
+Everything is made live in the browser with the Web Audio API, so there are no audio files to download. The two buttons at the top right switch the music and the sound effects on or off separately, and the phone remembers each choice. On iPhone, the silent switch also mutes them.
 
 ## Deploy to GitHub Pages
 

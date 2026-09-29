@@ -58,6 +58,18 @@ test("the right PIN and 3 taps reveal the giftee and 3 gift ideas", async ({ pag
   await expect(page.locator(".idea")).toHaveCount(3);
 });
 
+test("replaying the reveal from the bottom of the page brings the gift back into view", async ({ page }) => {
+  await page.goto("./#/pin/feisha");
+  await enterPin(page, "2356");
+  await page.getByRole("button", { name: /skip the animation/i }).click();
+  const replay = page.getByRole("button", { name: /replay the reveal/i });
+  await replay.scrollIntoViewIfNeeded();
+  expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(200);
+  await replay.click();
+  await expect(page.getByRole("button", { name: /open your gift/i })).toBeInViewport();
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+});
+
 test.describe("reduced motion", () => {
   test("shows the giftee straight away, no tapping needed", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });

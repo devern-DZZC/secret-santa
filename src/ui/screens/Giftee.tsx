@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, m } from "motion/react";
-import { ArrowCounterClockwise, Gift, UserSwitch } from "@phosphor-icons/react";
+import { ArrowCounterClockwise, UserSwitch } from "@phosphor-icons/react";
+import { Art, art } from "../art";
+import { sfx } from "../sound";
 import { event } from "../../data/event";
 import type { UnlockResult } from "../../lib/unlock";
 import { Button } from "../components/Button";
@@ -10,7 +12,8 @@ import { EASE_OUT, useCalmMode } from "../motion";
 import { focusRequest, useScreenHeading } from "../useScreenHeading";
 
 const TAPS = 3;
-const CONFETTI = ["#b3202a", "#e8b64c", "#1f7a55", "#fdfaf4"];
+const CONFETTI = ["#c8102e", "#148a3f", "#ffffff", "#ffc93c"];
+const IDEA_ART = [art.wrappedGift, art.star, art.bell];
 
 function RevealHeading({ name }: { name: string }) {
   const ref = useScreenHeading();
@@ -61,6 +64,7 @@ export function Giftee({ result, playReveal, onSwitch }: Props) {
   useEffect(() => {
     if (phase !== "opening") return;
     burst();
+    sfx.reveal();
     const t = window.setTimeout(() => open(), 1900);
     return () => window.clearTimeout(t);
   }, [phase]);
@@ -75,6 +79,7 @@ export function Giftee({ result, playReveal, onSwitch }: Props) {
     if (phase !== "wrapped") return; // aria-disabled button: ignore taps once opening
     navigator.vibrate?.(20);
     const next = tapsLeft - 1;
+    sfx.tap(TAPS - next);
     setTapsLeft(next);
     if (next === 0) setPhase("opening");
   };
@@ -115,7 +120,7 @@ export function Giftee({ result, playReveal, onSwitch }: Props) {
                 transition={{ delay: 0.25, duration: 0.9, ease: EASE_OUT }}
                 aria-hidden="true"
               >
-                <span className="reveal__emoji">{receiver.emoji}</span>
+                <Art emoji={receiver.emoji} className="reveal__art" />
                 <span className="reveal__name">{receiver.shortName}</span>
               </m.div>
             )}
@@ -134,15 +139,15 @@ export function Giftee({ result, playReveal, onSwitch }: Props) {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
         >
-          <header className="giftee__header">
+          <header className="giftee__header card">
             <m.span
-              className="giftee__emoji"
+              className="giftee__art"
               aria-hidden="true"
               initial={calm ? false : { scale: 0.4, rotate: -20 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ type: "spring", stiffness: 260, damping: 14 }}
             >
-              {receiver.emoji}
+              <Art emoji={receiver.emoji} />
             </m.span>
             <GifteeHeading />
             <h2 className="giftee__name">{receiver.name}</h2>
@@ -161,7 +166,7 @@ export function Giftee({ result, playReveal, onSwitch }: Props) {
                   animate={{ opacity: 1, rotateX: 0, y: 0 }}
                   transition={{ delay: 0.25 + i * 0.16, duration: 0.6, ease: EASE_OUT }}
                 >
-                  <span className="idea__icon" aria-hidden="true"><Gift size={22} weight="fill" /></span>
+                  <span className="idea__icon" aria-hidden="true"><img src={IDEA_ART[i % IDEA_ART.length]} alt="" /></span>
                   <span className="idea__text">
                     <strong>{g.idea}</strong>
                     {g.note && <span>{g.note}</span>}
@@ -178,7 +183,7 @@ export function Giftee({ result, playReveal, onSwitch }: Props) {
           <EventCard event={event} compact />
 
           <div className="giftee__actions">
-            <Button variant="ghost" onClick={replay} icon={<ArrowCounterClockwise size={20} weight="bold" aria-hidden="true" />}>
+            <Button variant="light" onClick={replay} icon={<ArrowCounterClockwise size={20} weight="bold" aria-hidden="true" />}>
               Replay the reveal
             </Button>
             <Button variant="quiet" onClick={onSwitch} icon={<UserSwitch size={20} weight="bold" aria-hidden="true" />}>

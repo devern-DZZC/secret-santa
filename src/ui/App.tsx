@@ -9,6 +9,8 @@ import { screenTransition, useCalmMode } from "./motion";
 import { Lights } from "./scene/Lights";
 import { Snow } from "./scene/Snow";
 import { Sleigh } from "./scene/Sleigh";
+import { Village } from "./scene/Village";
+import { SoundToggle } from "./components/SoundToggle";
 import { Giftee } from "./screens/Giftee";
 import { Landing } from "./screens/Landing";
 import { PinPad } from "./screens/PinPad";
@@ -71,18 +73,20 @@ export function App() {
   } else if (giftee) screen = <Giftee result={giftee} playReveal={justUnlocked} onSwitch={switchPerson} />;
 
   return (
-    <>
+    <div className="page">
       <div className="sky" aria-hidden="true" />
       {!calm && <Snow />}
-      {!calm && route.name === "home" && <Sleigh />}
+      {!calm && route.name !== "pin" && <Sleigh />}
+      {route.name !== "pin" && <Village />}
       <Lights />
-      <main className="app">
+      <SoundToggle />
+      <main className={`app app--${route.name}`}>
         <AnimatePresence mode="wait">
           <m.div key={key} {...screenTransition(calm)}>
             {screen}
           </m.div>
         </AnimatePresence>
       </main>
-    </>
+    </div>
   );
 }

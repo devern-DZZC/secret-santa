@@ -19,8 +19,8 @@ const NAMES = [
 for (const name of NAMES) {
   const data = getIconData(set, name);
   if (!data) throw new Error(`Missing icon: ${name}`);
-  const svg = iconToSVG(data);
-  const html = iconToHTML(svg.body, { ...svg.attributes, xmlns: "http://www.w3.org/2000/svg" });
+  const svg = iconToSVG(data, { height: "auto" });
+  const html = iconToHTML(svg.body, svg.attributes); // already includes xmlns
   writeFileSync(new URL(`../../src/assets/art/${name}.svg`, import.meta.url), html);
 }
 console.log(`Wrote ${NAMES.length} illustrations.`);

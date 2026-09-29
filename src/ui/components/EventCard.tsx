@@ -14,7 +14,7 @@ function downloadIcs(event: EventDetails) {
 
 export function EventCard({ event, compact = false }: { event: EventDetails; compact?: boolean }) {
   return (
-    <section className={`event-card${compact ? " event-card--compact" : ""}`} aria-labelledby="event-heading">
+    <section className={`event-card card${compact ? " event-card--compact" : ""}`} aria-labelledby="event-heading">
       <h2 id="event-heading" className="event-card__title">
         {compact ? "See you there" : "Where and when"}
       </h2>

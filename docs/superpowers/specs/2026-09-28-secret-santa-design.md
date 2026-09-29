@@ -509,3 +509,36 @@ All 10 are unique, 4-digit strings, and none is on the trivial list. `pins:gener
 **Review against defaults:** the generic take would be a red-and-green card with a script Christmas font, a centred title over snow and a plain 2×5 grid of name buttons. This design replaces the script font with rounded Fredoka, the name grid with the ornament wall, and generic copy with Trini vernacular. It uses one accent colour instead of alternating red and green.
 
 **Dark mode:** the app is dark-only on purpose, because the night scene is the brand. It still meets WCAG AA throughout.
+
+---
+
+## 15. Addendum: Christmas redesign (2026-09-28, evening)
+
+The host found the night theme too dark and plain. This section replaces §14.4's visual direction.
+
+**Brief (host's words):** very Christmas-themed, red, green and white, more background animation (snow, twinkling lights), Santa and reindeer, less plain and professional, and sound on the gift taps and the reveal.
+
+**Design read:** a festive family party invite and reveal game for Trinidadian cousins on their phones. The look is a Christmas card come to life: bright, playful and abundant. It's built with React, Motion and native CSS, plus Fluent Emoji illustrations. Dials: DESIGN_VARIANCE 5, MOTION_INTENSITY 8, VISUAL_DENSITY 4.
+
+**Tokens**
+| Token | Hex | Role |
+|---|---|---|
+| Red | `#c8102e` | The sky and page background (a light theme, locked) |
+| Green | `#148a3f` | Primary buttons, keypad digits, the gift box |
+| Snow | `#fffdf8` | Cards, tags, keys, text on red |
+| Gold | `#ffc93c` | Lights, stars and sparkles only |
+| Ink | `#1d3a2a` | Text on white cards |
+
+**Type:** Berkshire Swash for headlines, like a vintage Christmas card. Fredoka for everything else.
+
+**Scene (all transform/opacity, and off for reduced motion):**
+- a pine garland of 15 twinkling multicolour bulbs,
+- 64 snowflakes at three depths, including spinning crystals,
+- Santa's sleigh with three reindeer and a sparkle trail, crossing every 17 seconds (not on the PIN screen),
+- a snowy village with trees, a house and a snowman at the end of each page.
+
+**Illustrations:** Microsoft Fluent Emoji (flat, MIT), extracted by `scripts/art/extract.mjs`. Each cousin's emoji maps to its illustration, so every phone shows the same artwork.
+
+**Sound:** the Web Audio API synthesises everything, with no files. There's a key tick, a wrong-PIN two-tone, an unlock ding-ding, sleigh bells on each gift tap (growing with each tap) and a bell arpeggio with sleigh-bell shimmer on the reveal. The mute preference is stored in `ss:sound` and defaults to on.
+
+**Review against defaults:** the generic take would be a red page with a script font and snow. This design adds the hanging gift-tag countdown, the patterned ornament wall on a garland, snowball keys, a candy-cane edge on every card, and the sleigh flyover as a recurring character. It also keeps the Trini vernacular in the copy.

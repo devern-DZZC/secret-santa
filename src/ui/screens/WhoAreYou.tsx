@@ -6,6 +6,7 @@ import type { PersonId } from "../../data/people";
 import { ORNAMENT_TONES, Ornament } from "../components/Ornament";
 import { useCalmMode } from "../motion";
 import { useScreenHeading } from "../useScreenHeading";
+import { sfx } from "../sound";
 
 // Staggered string lengths make the wall look hand-hung rather than gridded.
 const STRINGS = [22, 58, 46, 18, 30, 64, 60, 26, 20, 50];
@@ -20,6 +21,7 @@ export function WhoAreYou({ onPick, onBack }: { onPick: (id: PersonId) => void; 
   const pick = (id: PersonId) => {
     if (picked) return;
     setPicked(id);
+    sfx.tap(1);
     timer.current = window.setTimeout(() => onPick(id), calm ? 0 : 420);
   };
 

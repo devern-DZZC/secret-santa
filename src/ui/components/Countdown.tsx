@@ -7,7 +7,8 @@ function Unit({ value, label }: { value: number; label: string }) {
   const calm = useCalmMode();
   const text = String(value).padStart(2, "0");
   return (
-    <div className="countdown__unit">
+    <div className="countdown__unit tag">
+      <span className="tag__hole" aria-hidden="true" />
       <span className="countdown__value">
         <AnimatePresence mode="popLayout" initial={false}>
           <m.span

@@ -64,6 +64,10 @@ The tests prove this several ways:
 - a fairness check,
 - and the 10 × 10 PIN matrix (each PIN opens only its owner).
 
+## Sound
+
+Gift taps jingle like sleigh bells, the reveal plays a bell fanfare, and the keypad clicks and dings. The sounds are made in the browser with the Web Audio API, so there are no audio files to download. The speaker button at the top right turns sound off or on, and the phone remembers the choice. On iPhone, the silent switch also mutes these sounds.
+
 ## Deploy to GitHub Pages
 
 1. Create a GitHub repo and push this folder to its `main` branch. Free GitHub Pages needs a **public** repo, so the code (including PINs) is visible to anyone who goes looking.
@@ -81,3 +85,7 @@ e2e/             phone browser tests (Playwright)
 scripts/         draw, PIN list, link-preview image
 docs/superpowers design spec and implementation plan
 ```
+
+## Credits
+
+Christmas illustrations (Santa, reindeer, sleigh, trees, snowman and the cousins' icons) are from Microsoft's [Fluent Emoji](https://github.com/microsoft/fluentui-emoji), flat style, MIT licence. `node scripts/art/extract.mjs` regenerates them. Headline font: Berkshire Swash. UI font: Fredoka.

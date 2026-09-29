@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { LazyMotion, MotionConfig, domAnimation } from "motion/react";
 import "@fontsource-variable/fredoka";
-import "@fontsource-variable/figtree";
+import "@fontsource/berkshire-swash";
 import "./styles/app.css";
 import { App } from "./ui/App";
 

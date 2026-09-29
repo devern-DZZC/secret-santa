@@ -1,39 +1,47 @@
 <!doctype html>
 <html><head><meta charset="utf-8">
 <style>
+@font-face{font-family:Berk;src:url(../../node_modules/@fontsource/berkshire-swash/files/berkshire-swash-latin-400-normal.woff2)}
 @font-face{font-family:Fredoka;src:url(../../node_modules/@fontsource-variable/fredoka/files/fredoka-latin-wght-normal.woff2)}
-@font-face{font-family:Figtree;src:url(../../node_modules/@fontsource-variable/figtree/files/figtree-latin-wght-normal.woff2)}
 html,body{margin:0;width:1200px;height:630px;overflow:hidden}
-body{background:radial-gradient(ellipse 120% 80% at 50% 0%,#17334f,transparent 70%),radial-gradient(ellipse 90% 50% at 50% 115%,rgb(15 61 46/.7),transparent 70%),#0b1a2a;color:#fdfaf4;font-family:Figtree;position:relative}
-.wire{position:absolute;inset:0 0 auto;width:100%;height:70px}
-.wire path{fill:none;stroke:rgb(253 250 244/.3);stroke-width:3}
-.b{position:absolute;width:20px;height:30px;border-radius:50% 50% 46% 46%/40% 40% 60% 60%;transform:translateX(-50%)}
-.b::after{content:"";position:absolute;inset:-16px;border-radius:50%;background:radial-gradient(circle,var(--c),transparent 68%);opacity:.6}
-.b{background:radial-gradient(circle at 40% 70%,#fff9,var(--c) 55%)}
-.wrap{position:absolute;inset:0;display:grid;grid-template-columns:1.25fr 1fr;align-items:center;padding:60px 80px 40px}
-h1{font:650 96px/0.95 Fredoka;margin:0;letter-spacing:-.015em}
-p{margin:26px 0 0;color:#a9b8c6;font-size:32px}
-p strong{color:#e8b64c;font:600 34px Fredoka}
-.orns{position:relative;height:430px}
-.o{position:absolute;display:flex;flex-direction:column;align-items:center}
-.o i{width:3px;background:linear-gradient(rgb(232 182 76/.1),rgb(232 182 76/.8))}
-.o b{width:30px;height:16px;border-radius:5px;background:linear-gradient(90deg,#8a6a2a,#f0d690 45%,#9c7a31)}
-.o span{display:grid;place-items:center;border-radius:50%;margin-top:-2px;box-shadow:inset -12px -16px 30px rgb(0 0 0/.35),0 20px 40px -18px #000;
- background:radial-gradient(circle at 32% 26%,rgb(255 255 255/.6) 0 5%,transparent 20%),radial-gradient(circle at 50% 45%,var(--l),var(--d) 78%)}
+body{color:#fffdf8;font-family:Fredoka;position:relative;
+ background:radial-gradient(ellipse 110% 60% at 50% -5%,rgb(255 255 255/.2),transparent 70%),
+ repeating-linear-gradient(45deg,rgb(255 255 255/.04) 0 2px,transparent 2px 30px),
+ repeating-linear-gradient(-45deg,rgb(255 255 255/.04) 0 2px,transparent 2px 30px),
+ radial-gradient(ellipse 100% 90% at 50% 20%,#e3344b,#c8102e 55%,#a90c25)}
+.g{position:absolute;inset:0 0 auto;width:100%;height:80px}
+.g .r{fill:none;stroke:#0b5c2a;stroke-width:16;stroke-linecap:round}
+.g .n{fill:none;stroke:#2aa052;stroke-width:11;stroke-dasharray:4 7}
+.b{position:absolute;width:24px;height:34px;border-radius:50% 50% 46% 46%/40% 40% 60% 60%;transform:translateX(-50%);background:radial-gradient(circle at 40% 70%,#fffd,var(--c) 55%)}
+.b::after{content:"";position:absolute;inset:-18px;border-radius:50%;background:radial-gradient(circle,var(--c),transparent 66%);opacity:.7}
+.f{position:absolute;border-radius:50%;background:#fff;opacity:.8}
+.wrap{position:absolute;inset:0;display:grid;grid-template-columns:1.35fr 1fr;align-items:center;padding:70px 70px 40px 80px}
+h1{font:400 104px/0.95 Berk;margin:0;text-shadow:0 6px 0 #8f0a20}
+h1 small{display:block;font-size:56px}
+p{margin:24px 0 0;font-size:32px;color:#ffe2e6}
+p strong{display:inline-block;margin-top:14px;padding:8px 22px;border-radius:999px;background:#fffdf8;color:#0b5c2a;font-weight:600;font-size:30px}
+.art{position:relative;height:420px}
+.art img{position:absolute}
+.hills{position:absolute;left:0;bottom:0;width:100%;height:90px}
 </style></head><body>
-<svg class="wire" viewBox="0 0 1200 70" preserveAspectRatio="none"><path d="M0 8 Q 100 52 200 12 T 400 12 T 600 12 T 800 12 T 1000 12 T 1200 8"/></svg>
-<div id="bulbs"></div>
+<svg class="g" viewBox="0 0 1200 80" preserveAspectRatio="none"><path class="r" d="M0 10 Q 100 58 200 16 T 400 16 T 600 16 T 800 16 T 1000 16 T 1200 10"/><path class="n" d="M0 10 Q 100 58 200 16 T 400 16 T 600 16 T 800 16 T 1000 16 T 1200 10"/></svg>
+<div id="bulbs"></div><div id="snow"></div>
+<svg class="hills" viewBox="0 0 400 90" preserveAspectRatio="none"><path fill="#edf2f5" d="M0 50 C 70 20 140 24 210 44 C 270 60 330 26 400 36 V90 H0 Z"/><path fill="#fffdf8" d="M0 70 C 90 44 170 56 240 64 C 310 72 350 52 400 58 V90 H0 Z"/></svg>
 <div class="wrap">
-  <div><h1>Cousins'<br>Secret Santa</h1><p>Find out who you're buying for.<br><strong>Sunday 27 December, 7pm<br>at The Alley</strong></p></div>
-  <div class="orns">
-    <div class="o" style="left:110px;top:0"><i style="height:290px"></i><b></b><span style="width:100px;height:100px;font-size:42px;--l:#f5d27a;--d:#8d6414">⭐</span></div>
-    <div class="o" style="left:20px;top:0"><i style="height:90px"></i><b></b><span style="width:150px;height:150px;font-size:64px;--l:#d63c47;--d:#6c0f18">🎁</span></div>
-    <div class="o" style="left:200px;top:0"><i style="height:190px"></i><b></b><span style="width:120px;height:120px;font-size:50px;--l:#2f9c6e;--d:#0a3021">⛄</span></div>
+  <div><h1><small>Cousins'</small>Secret Santa</h1><p>Find out who you're buying for.<br><strong>Sun 27 Dec, 7pm at The Alley</strong></p></div>
+  <div class="art">
+    <img src="../../src/assets/art/santa-claus.svg" style="width:230px;left:60px;top:40px">
+    <img src="../../src/assets/art/sparkles.svg" style="width:70px;left:260px;top:20px">
+    <img src="../../src/assets/art/wrapped-gift.svg" style="width:120px;left:0;top:270px">
+    <img src="../../src/assets/art/christmas-tree.svg" style="width:130px;left:230px;top:250px">
   </div>
 </div>
 <script>
-const c=["#ffd36e","#ff5a64","#4fd49a","#9fd4ff"];let h="";
-for(let i=0;i<14;i++){const x=(i+.5)/14;const y=(12+22*Math.abs(Math.sin(x*Math.PI*6)))*70/70;h+=`<span class="b" style="left:${x*100}%;top:${y}px;--c:${c[i%4]}"></span>`}
+const c=["#ffd24a","#fff6d8","#6fc6ff","#7ef08f","#ff9b3d","#ff8fc8"];let h="";
+for(let i=0;i<16;i++){const x=(i+.5)/16;const y=(16+26*Math.abs(Math.sin(x*Math.PI*6)))*80/80+4;h+=`<span class="b" style="left:${x*100}%;top:${y}px;--c:${c[i%6]}"></span>`}
 document.getElementById("bulbs").innerHTML=h;
+let s="";let seed=7;const r=()=>(seed=(seed*16807)%2147483647)/2147483647;
+for(let i=0;i<45;i++){const z=3+r()*7;s+=`<span class="f" style="left:${r()*1200}px;top:${90+r()*460}px;width:${z}px;height:${z}px"></span>`}
+document.getElementById("snow").innerHTML=s;
 </script>
 </body></html>

@@ -8,6 +8,7 @@ import { ORNAMENT_TONES, Ornament } from "../components/Ornament";
 import { formatClock } from "../format";
 import { useCalmMode } from "../motion";
 import { useScreenHeading } from "../useScreenHeading";
+import { sfx } from "../sound";
 
 const PIN_LENGTH = 4;
 const KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "back"] as const;
@@ -62,12 +63,14 @@ export function PinPad({ person, tracker, onUnlocked, onBack }: Props) {
       const result = unlock(person.id, pin);
       if (result) {
         tracker.recordSuccess(person.id);
+        sfx.unlock();
         setStatus("success");
         setMessage("");
         later(() => onUnlocked(result, pin), calm ? 0 : 750);
         return;
       }
       tracker.recordFailure(person.id);
+      sfx.wrong();
       setStatus("wrong");
       navigator.vibrate?.(80);
       if (!calm && scope.current) animate(scope.current, { x: [0, -14, 12, -9, 6, -3, 0] }, { duration: 0.45 });
@@ -101,10 +104,11 @@ export function PinPad({ person, tracker, onUnlocked, onBack }: Props) {
 
   const press = useCallback(
     (key: string) => {
+      if (statusRef.current === "idle" && !tracker.isLocked(person.id)) sfx.key();
       if (key === "back") accept(digitsRef.current.slice(0, -1));
       else accept(digitsRef.current + key);
     },
-    [accept],
+    [accept, tracker, person.id],
   );
 
   // Hardware keyboards: digits and backspace anywhere on the page.

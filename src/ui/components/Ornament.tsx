@@ -1,18 +1,19 @@
 import type { CSSProperties } from "react";
+import { Art } from "../art";
 
-export const ORNAMENT_TONES = ["cranberry", "pine", "gold", "frost"] as const;
+export const ORNAMENT_TONES = ["red", "green", "gold", "frost"] as const;
 export type OrnamentTone = (typeof ORNAMENT_TONES)[number];
 
 interface Props {
   emoji: string;
   tone: OrnamentTone;
-  /** Length of the string it hangs from, in px. */
+  /** Length of the ribbon it hangs from, in px. */
   stringLength?: number;
   size?: "md" | "lg";
   glowing?: boolean;
 }
 
-/** A glass bauble on a string. Purely visual; wrap it in a button to make it interactive. */
+/** A patterned glass bauble on a ribbon. Purely visual; wrap it in a button to make it interactive. */
 export function Ornament({ emoji, tone, stringLength = 28, size = "md", glowing = false }: Props) {
   return (
     <span
@@ -23,7 +24,7 @@ export function Ornament({ emoji, tone, stringLength = 28, size = "md", glowing 
       <span className="ornament__string" />
       <span className="ornament__cap" />
       <span className="ornament__ball">
-        <span className="ornament__emoji">{emoji}</span>
+        <Art emoji={emoji} className="ornament__art" />
       </span>
     </span>
   );

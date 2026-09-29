@@ -6,6 +6,7 @@ import { Countdown } from "../components/Countdown";
 import { EventCard } from "../components/EventCard";
 import { EASE_OUT, useCalmMode } from "../motion";
 import { useScreenHeading } from "../useScreenHeading";
+import { art } from "../art";
 
 export function Landing({ onStart }: { onStart: () => void }) {
   const calm = useCalmMode();
@@ -18,8 +19,18 @@ export function Landing({ onStart }: { onStart: () => void }) {
   return (
     <div className="screen screen--landing">
       <header className="hero">
+        <m.div
+          className="hero__santa"
+          initial={calm ? false : { scale: 0.3, rotate: -25, opacity: 0 }}
+          animate={{ scale: 1, rotate: 0, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 220, damping: 12, delay: 0.1 }}
+        >
+          <img src={art.santa} alt="" className="hero__santa-img" />
+          <img src={art.sparkles} alt="" className="hero__sparkle" />
+        </m.div>
         <m.h1 className="hero__title" ref={heading} tabIndex={-1} {...rise(0.05)}>
-          Cousins'<br />Secret Santa
+          <span className="hero__small">Cousins'</span>
+          Secret Santa
         </m.h1>
         <m.p className="hero__lede" {...rise(0.15)}>
           Pick your name, tap in your PIN and find out who you're buying for this Christmas.

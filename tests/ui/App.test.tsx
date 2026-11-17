@@ -27,9 +27,11 @@ describe("App flow", () => {
     await go("#/");
     vi.useRealTimers();
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(/secret santa/i);
-    expect(screen.getByText(/the alley/i)).toBeInTheDocument();
+    expect(screen.getByText("Skallywag Bay")).toBeInTheDocument();
+    expect(screen.getByText("Sails Restaurant & Pub")).toBeInTheDocument();
     expect(screen.getByText(/27 december/i)).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /open in maps/i })).toHaveAttribute(
+    expect(screen.getByText("6:00 pm")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Open Skallywag Bay in Maps" })).toHaveAttribute(
       "href",
       expect.stringContaining("google.com/maps"),
     );

@@ -857,6 +857,39 @@ html[data-hidden] .sleigh__bob {
   font-size: 0.98rem;
 }
 
+.event-card__row .event-card__eyebrow {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--red);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.event-card__address {
+  display: block;
+}
+
+.event-card__map-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  margin-top: 2px;
+  color: var(--green);
+  font-size: 0.94rem;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.event-card__map-link:focus-visible {
+  border-radius: 6px;
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
 .event-card__actions {
   display: grid;
   gap: 10px;

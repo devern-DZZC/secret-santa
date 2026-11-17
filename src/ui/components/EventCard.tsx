@@ -26,13 +26,26 @@ export function EventCard({ event, compact = false }: { event: EventDetails; com
             <span>{formatEventTime(event.startsAt)}</span>
           </dd>
         </div>
-        <div className="event-card__row">
-          <dt><MapPin size={22} weight="duotone" aria-label="Place" /></dt>
-          <dd>
-            <strong>{event.venueName}</strong>
-            <span>{event.address}</span>
-          </dd>
-        </div>
+        {event.stops.map((stop) => (
+          <div className="event-card__row" key={stop.name}>
+            <dt><MapPin size={22} weight="duotone" aria-hidden="true" /></dt>
+            <dd>
+              <span className="event-card__eyebrow">{stop.label}</span>
+              <strong>{stop.name}</strong>
+              <span className="event-card__address">{stop.address}</span>
+              <a
+                className="event-card__map-link"
+                href={stop.mapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Open ${stop.name} in Maps`}
+              >
+                <NavigationArrow size={18} weight="bold" aria-hidden="true" />
+                Open in Maps
+              </a>
+            </dd>
+          </div>
+        ))}
         {event.budget && (
           <div className="event-card__row">
             <dt><Wallet size={22} weight="duotone" aria-label="Budget" /></dt>
@@ -50,10 +63,6 @@ export function EventCard({ event, compact = false }: { event: EventDetails; com
         )}
       </dl>
       <div className="event-card__actions">
-        <a className="btn btn--ghost" href={event.mapUrl} target="_blank" rel="noopener noreferrer">
-          <NavigationArrow size={20} weight="bold" aria-hidden="true" />
-          <span>Open in Maps</span>
-        </a>
         <button type="button" className="btn btn--ghost" onClick={() => downloadIcs(event)}>
           <CalendarPlus size={20} weight="bold" aria-hidden="true" />
           <span>Add to calendar</span>

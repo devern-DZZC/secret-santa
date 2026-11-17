@@ -9,6 +9,18 @@ const stamp = (ms: number) => new Date(ms).toISOString().replace(/[-:]/g, "").re
 export function buildIcs(event: EventDetails, nowMs: number): string {
   const start = Date.parse(event.startsAt);
   const end = start + event.durationHours * 3_600_000;
+  const firstStop = event.stops[0];
+  if (!firstStop) throw new Error("The event needs at least one stop");
+  const description = [
+    event.notes,
+    "",
+    "Itinerary:",
+    ...event.stops.flatMap((stop, index) => [
+      `${index + 1}. ${stop.label}: ${stop.name}`,
+      stop.address,
+      stop.mapUrl,
+    ]),
+  ].join("\n");
   return [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
@@ -20,8 +32,8 @@ export function buildIcs(event: EventDetails, nowMs: number): string {
     `DTSTART:${stamp(start)}`,
     `DTEND:${stamp(end)}`,
     `SUMMARY:${escape(event.title)}`,
-    `LOCATION:${escape(`${event.venueName}, ${event.address}`)}`,
-    `DESCRIPTION:${escape(event.notes)}`,
+    `LOCATION:${escape(`${firstStop.name}, ${firstStop.address}`)}`,
+    `DESCRIPTION:${escape(description)}`,
     "END:VEVENT",
     "END:VCALENDAR",
     "",

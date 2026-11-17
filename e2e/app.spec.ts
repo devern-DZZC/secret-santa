@@ -23,13 +23,17 @@ test("landing shows the title, countdown and event details", async ({ page }) =>
   await page.goto("./");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Secret Santa");
   await expect(page.getByRole("timer")).toBeVisible();
-  await expect(page.getByText("The Alley", { exact: true })).toBeVisible();
-  await expect(page.getByText("East Gates Mall, Trincity, Trinidad")).toBeVisible();
+  await expect(page.getByText("Skallywag Bay", { exact: true })).toBeVisible();
+  await expect(page.getByText("Sails Restaurant & Pub", { exact: true })).toBeVisible();
   await expect(page.getByText(/27 December 2026/)).toBeVisible();
-  await expect(page.getByText("7:00 pm")).toBeVisible();
-  await expect(page.getByRole("link", { name: "Open in Maps" })).toHaveAttribute(
+  await expect(page.getByText("6:00 pm")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Open Skallywag Bay in Maps" })).toHaveAttribute(
     "href",
-    /google\.com\/maps\/search\/\?api=1&query=The\+Alley\+East\+Gates\+Mall/,
+    /query=Skallywag\+Bay\+Chaguaramas\+Trinidad/,
+  );
+  await expect(page.getByRole("link", { name: "Open Sails Restaurant & Pub in Maps" })).toHaveAttribute(
+    "href",
+    /query=Sails\+Restaurant\+and\+Pub\+Chaguaramas\+Trinidad/,
   );
   // budget isn't set yet, so its row stays hidden
   await expect(page.getByText("Spending limit")).toHaveCount(0);
@@ -43,7 +47,7 @@ test("a wrong PIN shows an error and reveals nothing", async ({ page }) => {
   await expect(page.getByText("You're Secret Santa for")).toHaveCount(0);
 });
 
-test("the right PIN and 3 taps reveal the giftee and 3 gift ideas", async ({ page }) => {
+test("the right PIN and 3 taps reveal only the giftee and event details", async ({ page }) => {
   await page.goto("./");
   await page.getByRole("button", { name: "Find my giftee" }).click();
   await page.getByRole("button", { name: "I'm Feisha" }).click();
@@ -55,7 +59,10 @@ test("the right PIN and 3 taps reveal the giftee and 3 gift ideas", async ({ pag
   }
   await expect(page.getByText("You're Secret Santa for")).toBeVisible({ timeout: 6000 });
   await expect(page.getByRole("heading", { level: 2, name: "Nathan" })).toBeVisible();
-  await expect(page.locator(".idea")).toHaveCount(3);
+  await expect(page.getByText(/your mission: pick out something thoughtful and keep it secret/i)).toBeVisible();
+  await expect(page.locator(".idea")).toHaveCount(0);
+  await expect(page.getByText("Skallywag Bay", { exact: true })).toBeVisible();
+  await expect(page.getByText("Sails Restaurant & Pub", { exact: true })).toBeVisible();
 });
 
 test("replaying the reveal from the bottom of the page brings the gift back into view", async ({ page }) => {
@@ -64,7 +71,7 @@ test("replaying the reveal from the bottom of the page brings the gift back into
   await page.getByRole("button", { name: /skip the animation/i }).click();
   const replay = page.getByRole("button", { name: /replay the reveal/i });
   await replay.scrollIntoViewIfNeeded();
-  expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(200);
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
   await replay.click();
   await expect(page.getByRole("button", { name: /open your gift/i })).toBeInViewport();
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);

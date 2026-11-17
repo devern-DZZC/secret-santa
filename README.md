@@ -1,8 +1,8 @@
 # Cousins' Secret Santa 🎁
 
-A festive, mobile-first Secret Santa page for 10 cousins. Each cousin picks their name, types their 4-digit PIN and unwraps a gift to find out who they're buying for, plus 3 gift ideas for that person.
+A festive, mobile-first Secret Santa page for 10 cousins. Each cousin picks their name, types their 4-digit PIN and unwraps a gift to find out who they're buying for.
 
-- **Event:** Sunday 27 December 2026, 7:00 pm at The Alley, East Gates Mall, Trincity
+- **Event:** Sunday 27 December 2026 from 6:00 pm, with mini golf at Skallywag Bay followed by dinner at Sails Restaurant & Pub in Chaguaramas.
 - **No database.** Everything is hardcoded and the site is plain static files on GitHub Pages.
 - **The draw is hidden, even from you.** It's stored scrambled, and the tests check it without ever printing who drew whom.
 
@@ -27,11 +27,10 @@ npm run dev          # open the local link it prints
 
 ## Before you send the link
 
-1. **Update the gift ideas** in `src/data/people.ts`. The ones there now are placeholders. Changing them never changes the draw.
-2. **Set the budget** (optional) in `src/data/event.ts`, for example `budget: "$200 TTD"`. It stays hidden while it's `null`.
-3. **Decide on the draw.** A draw has already been made and checked. If you ever change the people or the rules, run `npm run draw -- --force` and then `npm test`.
-4. Run `npm test`. You'll see test names and ✓ marks, never pairings.
-5. Run `npm run pins:list` and send each cousin their PIN privately.
+1. **Set the budget** (optional) in `src/data/event.ts`, for example `budget: "$200 TTD"`. It stays hidden while it's `null`.
+2. **Decide on the draw.** A draw has already been made and checked. If you ever change the people or the rules, run `npm run draw -- --force` and then `npm test`.
+3. Run `npm test`. You'll see test names and ✓ marks, never pairings.
+4. Run `npm run pins:list` and send each cousin their PIN privately.
 
 ## How the draw stays secret
 
@@ -81,7 +80,7 @@ Everything is made live in the browser with the Web Audio API, so there are no a
 ## Project layout
 
 ```
-src/data/        people, PINs, gift ideas, rules, event details, scrambled draw
+src/data/        people, PINs, rules, event details, scrambled draw
 src/lib/         draw engine, scrambling, unlock, cooldown, countdown, calendar file
 src/ui/          screens (landing, who are you, PIN pad, reveal and giftee), night scene
 tests/           unit tests (Vitest)

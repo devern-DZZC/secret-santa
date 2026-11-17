@@ -37,6 +37,10 @@ describe("add-to-calendar file", () => {
     const tricky = buildIcs({ ...event, title: "A; B, C\\D\nE" }, 0);
     expect(tricky).toContain("SUMMARY:A\\; B\\, C\\\\D\\nE");
   });
+
+  it("rejects an event without a meeting stop", () => {
+    expect(() => buildIcs({ ...event, stops: [] }, 0)).toThrow("The event needs at least one stop");
+  });
 });
 
 describe("event data", () => {

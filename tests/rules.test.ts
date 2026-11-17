@@ -44,13 +44,12 @@ describe("people data", () => {
     ]);
   });
 
-  it("gives everyone a name, short name, emoji and exactly 3 gift ideas", () => {
-    for (const p of people) {
-      expect(p.name.trim()).not.toBe("");
-      expect(p.shortName.trim()).not.toBe("");
-      expect(p.emoji.trim()).not.toBe("");
-      expect(p.wishlist).toHaveLength(3);
-      for (const g of p.wishlist) expect(g.idea.trim()).not.toBe("");
+  it("gives everyone public identity data without gift recommendations", () => {
+    for (const person of people) {
+      expect(person.name.trim()).not.toBe("");
+      expect(person.shortName.trim()).not.toBe("");
+      expect(person.emoji.trim()).not.toBe("");
+      expect("wishlist" in person).toBe(false);
     }
   });
 

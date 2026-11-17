@@ -50,7 +50,8 @@ describe("App flow", () => {
     // reduced motion: the gift opens straight away
     expect(await screen.findByText(/you're secret santa for/i)).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 2, name: nameOf(FIXTURE_DRAW.feisha!) })).toBeInTheDocument();
-    expect(screen.getAllByRole("listitem")).toHaveLength(3);
+    expect(screen.getByText(/your mission: pick out something thoughtful and keep it secret/i)).toBeInTheDocument();
+    expect(screen.queryByText(/would love/i)).not.toBeInTheDocument();
   });
 
   it("never shows a giftee from a pasted link without the PIN", async () => {

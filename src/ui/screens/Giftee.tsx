@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, m } from "motion/react";
 import { ArrowCounterClockwise, UserSwitch } from "@phosphor-icons/react";
-import { Art, art } from "../art";
+import { Art } from "../art";
 import { sfx } from "../sound";
 import { duckMusic } from "../music";
 import { event } from "../../data/event";
@@ -14,7 +14,6 @@ import { focusRequest, useScreenHeading } from "../useScreenHeading";
 
 const TAPS = 3;
 const CONFETTI = ["#c8102e", "#148a3f", "#ffffff", "#ffc93c"];
-const IDEA_ART = [art.wrappedGift, art.star, art.bell];
 
 function RevealHeading({ name }: { name: string }) {
   const ref = useScreenHeading();
@@ -157,32 +156,12 @@ export function Giftee({ result, playReveal, onSwitch }: Props) {
             <h2 className="giftee__name">{receiver.name}</h2>
           </header>
 
-          <section className="ideas" aria-labelledby="ideas-heading">
-            <h3 id="ideas-heading" className="ideas__title">
-              {receiver.shortName.split(" ")[0]} would love
-            </h3>
-            <ul className="ideas__list">
-              {receiver.wishlist.map((g, i) => (
-                <m.li
-                  key={g.idea}
-                  className="idea"
-                  initial={calm ? false : { opacity: 0, rotateX: -80, y: 12 }}
-                  animate={{ opacity: 1, rotateX: 0, y: 0 }}
-                  transition={{ delay: 0.25 + i * 0.16, duration: 0.6, ease: EASE_OUT }}
-                >
-                  <span className="idea__icon" aria-hidden="true"><img src={IDEA_ART[i % IDEA_ART.length]} alt="" /></span>
-                  <span className="idea__text">
-                    <strong>{g.idea}</strong>
-                    {g.note && <span>{g.note}</span>}
-                  </span>
-                </m.li>
-              ))}
-            </ul>
+          <section className="giftee__mission" aria-label="Secret Santa mission">
+            <p>Your mission: pick out something thoughtful and keep it secret.</p>
+            <p className="hush">
+              <span aria-hidden="true">🤫</span> Shh! Keep it secret until the lime.
+            </p>
           </section>
-
-          <p className="hush">
-            <span aria-hidden="true">🤫</span> Shh! Keep it secret until the lime.
-          </p>
 
           <EventCard event={event} compact />
 

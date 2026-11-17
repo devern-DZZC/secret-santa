@@ -15,7 +15,7 @@ beforeEach(() => setReducedMotion(false));
 const result = () => unlock("feisha", "2356")!;
 
 describe("gift reveal", () => {
-  it("takes 3 taps to open, then shows the giftee and 3 gift ideas", async () => {
+  it("takes 3 taps to open, then shows the giftee without gift recommendations", async () => {
     const user = userEvent.setup();
     render(<Giftee result={result()} playReveal onSwitch={() => {}} />);
     expect(screen.getByRole("heading", { name: /ready, feisha/i })).toBeInTheDocument();
@@ -27,7 +27,9 @@ describe("gift reveal", () => {
 
     expect(await screen.findByText(/you're secret santa for/i, {}, { timeout: 4000 })).toBeInTheDocument();
     expect(confetti).toHaveBeenCalled();
-    expect(screen.getAllByRole("listitem")).toHaveLength(3);
+    expect(screen.getByText(/your mission: pick out something thoughtful and keep it secret/i)).toBeInTheDocument();
+    expect(screen.queryByText(/would love/i)).not.toBeInTheDocument();
+    expect(document.querySelectorAll(".idea")).toHaveLength(0);
   });
 
   it("can skip the animation", async () => {
@@ -80,4 +82,3 @@ describe("timers are cancelled when leaving a screen", () => {
     expect(onPick).not.toHaveBeenCalled();
   });
 });
-

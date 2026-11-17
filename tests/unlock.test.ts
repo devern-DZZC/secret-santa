@@ -35,10 +35,14 @@ describe("PIN matrix: every person × every PIN (100 combinations)", () => {
       assertSecret(result !== null, "correct PIN did not unlock");
       assertSecret(result.giver.id === id, "unlocked the wrong giver");
       assertSecret(result.receiver.id === expectedReceiverId(id), "returned the wrong giftee");
-      const giftee = people.find((p) => p.id === result.receiver.id)!;
+      const expectedPublicKeys = "emoji,id,name,shortName";
       assertSecret(
-        JSON.stringify(result.receiver.wishlist) === JSON.stringify(giftee.wishlist),
-        "returned the wrong wishlist",
+        Object.keys(result.giver).sort().join() === expectedPublicKeys,
+        "giver contains private or obsolete fields",
+      );
+      assertSecret(
+        Object.keys(result.receiver).sort().join() === expectedPublicKeys,
+        "giftee contains private or obsolete fields",
       );
     });
   });
@@ -90,6 +94,7 @@ describe("unlock never leaks more than it should", () => {
       assertSecret(Object.keys(result).sort().join() === "giver,receiver", "unlock result has extra keys");
       const json = JSON.stringify(result);
       assertSecret(!json.includes('"pin"'), "unlock result includes a pin field");
+      assertSecret(!json.includes("wishlist"), "unlock result includes a wishlist");
       assertSecret(people.every((o) => !json.includes(`"${o.pin}"`)), "unlock result includes a PIN");
       assertSecret(!json.includes("assignments") && !json.includes("encoded"), "unlock result leaks the draw");
     }
